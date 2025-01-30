@@ -2,8 +2,6 @@ name = "docport-website-prod"
 compatibility_date = "2025-01-24"
 pages_build_output_dir = "dist"
 
-route = { pattern = "docport.io/*", zone_name = "docport.io" }
-
 d1_databases = [
     {  binding = "DATABASE", database_name = "docport-website-prod-db", database_id = "db8c5d9a-2cf5-4c1c-ac0f-1fa9862c5f0e" }
 ]
@@ -11,8 +9,6 @@ d1_databases = [
 
 [env.preview]
 name = "docport-website-dev"
-
-route = { pattern = "staging.docport.io/*", zone_name = "docport.io" }
 
 d1_databases = [
     {  binding = "DATABASE", database_name = "docport-website-staging-db", database_id = "d4e37d52-bf7e-4096-a6b3-478d5dfc4936" }
