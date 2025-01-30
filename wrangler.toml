@@ -1,0 +1,18 @@
+name = "docport-website-prod"
+compatibility_date = "2025-01-24"
+
+route = { pattern = "docport.io/*", zone_name = "docport.io" }
+
+d1_databases = [
+    {  binding = "DATABASE", database_name = "docport-website-prod-db", database_id = "docport-website-prod-db" }
+]
+
+
+[env.dev]
+name = "docport-website-dev"
+
+route = { pattern = "dev.docport.io/*", zone_name = "docport.io" }
+
+d1_databases = [
+    {  binding = "DATABASE", database_name = "docport-website-dev-db", database_id = "docport-website-dev-db" }
+]

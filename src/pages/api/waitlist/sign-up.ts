@@ -6,9 +6,18 @@ import { getSecret } from "astro:env/server";
 const turnstileURL =
   "https://challenges.cloudflare.com/turnstile/v0/siteverify";
 
-export const POST: APIRoute = async ({ request }) => {
+export type SignUpRequest = {
+  email: string;
+  turnstileToken: string;
+};
+
+export const POST: APIRoute = async ({ request, locals }) => {
+  const { env } = locals.runtime;
+
   try {
-    const { email, turnstileToken } = await request.json();
+    const { email, turnstileToken } = await request.json<
+      Partial<SignUpRequest>
+    >();
 
     if (!turnstileToken) {
       return new Response(
@@ -41,7 +50,7 @@ export const POST: APIRoute = async ({ request }) => {
       }),
     });
 
-    const outcome = await turnstileResponse.json();
+    const outcome = await turnstileResponse.json<any>();
 
     if (!outcome.success) {
       return new Response(
@@ -62,6 +71,28 @@ export const POST: APIRoute = async ({ request }) => {
         { status: 400 }
       );
     }
+
+    await env.DATABASE.exec("CREATE TABLE IF NOT EXISTS waitlist (email TEXT)");
+
+    const existing = await env.DATABASE.prepare(
+      "SELECT * FROM waitlist WHERE email = ?"
+    )
+      .bind(email)
+      .first();
+
+    if (existing) {
+      return new Response(
+        JSON.stringify({
+          success: true,
+          message: "You're already on the waitlist",
+        }),
+        { status: 200 }
+      );
+    }
+
+    await env.DATABASE.prepare("INSERT INTO waitlist (email) VALUES (?)")
+      .bind(email)
+      .run();
 
     return new Response(JSON.stringify({ success: true }), {
       status: 201,

@@ -47,7 +47,6 @@ export const WaitlistForm = () => {
       description: "We'll keep you updated on our progress.",
     });
     setEmail("");
-    setTurnstileToken("");
   };
   return (
     <section className="py-20 px-4 bg-primary text-white" id="waitlist">
