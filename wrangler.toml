@@ -1,5 +1,6 @@
 name = "docport-website-prod"
 compatibility_date = "2025-01-24"
+pages_build_output_dir = "dist"
 
 route = { pattern = "docport.io/*", zone_name = "docport.io" }
 
