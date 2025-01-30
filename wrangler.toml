@@ -9,11 +9,11 @@ d1_databases = [
 ]
 
 
-[env.dev]
+[env.preview]
 name = "docport-website-dev"
 
-route = { pattern = "dev.docport.io/*", zone_name = "docport.io" }
+route = { pattern = "staging.docport.io/*", zone_name = "docport.io" }
 
 d1_databases = [
-    {  binding = "DATABASE", database_name = "docport-website-dev-db", database_id = "docport-website-dev-db" }
+    {  binding = "DATABASE", database_name = "docport-website-staging-db", database_id = "d4e37d52-bf7e-4096-a6b3-478d5dfc4936" }
 ]
