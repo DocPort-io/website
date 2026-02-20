@@ -2,8 +2,6 @@ import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { NextResponse } from "next/server";
 import z from "zod";
 
-export const runtime = "edge";
-
 const emailSchema = z.email().max(255);
 
 export async function POST(request: Request) {
