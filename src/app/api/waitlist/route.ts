@@ -1,9 +1,10 @@
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { NextResponse } from "next/server";
+import z from "zod";
 
 export const runtime = "edge";
 
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const emailSchema = z.email().max(255);
 
 export async function POST(request: Request) {
   let email: string;
@@ -15,7 +16,9 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid request body." }, { status: 400 });
   }
 
-  if (!email || !EMAIL_RE.test(email)) {
+  const validateEmailResult = emailSchema.safeParse(email);
+
+  if (!email || !validateEmailResult.success) {
     return NextResponse.json(
       { error: "A valid email address is required." },
       { status: 400 }
@@ -27,7 +30,7 @@ export async function POST(request: Request) {
     await env.DB.prepare(
       "INSERT INTO waitlist (email, created_at) VALUES (?, datetime('now'))"
     )
-      .bind(email)
+      .bind(validateEmailResult.data)
       .run();
 
     return NextResponse.json({ success: true });
